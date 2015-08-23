@@ -4,3 +4,28 @@
         <h4 class="nopadding">{{title}}</h4>
     </div>
 </div>
+<!--create request-->
+<div class="row mt20 mt20">
+    <div class="form-group">
+        <input type="button" value="Create Request" data-ng-click="createApprovalRequest()" class="btn btn-default" />
+    </div>
+</div>
+<!--request list-->
+<div class="row mt20 mt20">
+    <table class="table table-condensed table-striped table-bordered table-responsive table-hover">
+        <thead>
+            <tr>
+                <th class="col-md-4 col-sm-2 col-xs-2">Patient Id</th>
+                <th class="col-md-6 col-sm-2 col-xs-2">Patient Name</th>
+                </tr>
+        </thead>
+        <tbody>
+            <tr data-ng-repeat="request in requestList">
+                <td>
+                  {{request.patientId}}
+                </td>
+                <td>{{request.patientName}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

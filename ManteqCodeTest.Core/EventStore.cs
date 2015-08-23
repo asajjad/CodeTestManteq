@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using ManteqCodeTest.Core.Domain;
+using Newtonsoft.Json;
 
 namespace ManteqCodeTest.Core
 {
@@ -63,6 +66,16 @@ namespace ManteqCodeTest.Core
 
                 // push event to the event descriptors list for current aggregate
                 eventDescriptors.Add(new EventDescriptor(aggregateId,@event,i));
+                //save event to database
+                using (var dataStoreContext = new SqlDataStoreContext())
+                {
+                    var manteqEvent = new ManteqEvent();
+                    manteqEvent.AggregateId = aggregateId;
+                    manteqEvent.Version = @event.Version;
+                    manteqEvent.Data = SerializeObject(@event);
+                    dataStoreContext.ManteqEvents.Add(manteqEvent);
+                    dataStoreContext.SaveChanges();
+                }
 
                 // publish current event to the bus for further processing by subscribers
                 _publisher.Publish(@event);
@@ -82,6 +95,12 @@ namespace ManteqCodeTest.Core
 
             return eventDescriptors.Select(desc => desc.EventData).ToList();
         }
+        private byte[] SerializeObject(object obj)
+        {
+            var jsonObj = JsonConvert.SerializeObject(obj);
+            var data = Encoding.UTF8.GetBytes(jsonObj);
+            return data;
+        }
     }
 
     public class AggregateNotFoundException : Exception
@@ -91,4 +110,6 @@ namespace ManteqCodeTest.Core
     public class ConcurrencyException : Exception
     {
     }
+
+
 }

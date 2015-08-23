@@ -1,9 +1,11 @@
-﻿using System.Reflection;
+﻿using System.Data.Entity;
+using System.Reflection;
 using System.Web.Http;
 using System.Web.Mvc;
 using Autofac;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
+using ManteqCodeTest.Core;
 
 namespace ManteqCodeTest.App_Start
 {
@@ -32,9 +34,14 @@ namespace ManteqCodeTest.App_Start
 
             //types
 
-          
-            //builder.RegisterType<FileService>().As<IFileService>().InstancePerRequest();
+            builder.RegisterType<SqlDataStoreContext>().As<DbContext>().InstancePerRequest();
+            
+            builder.RegisterGeneric(typeof(Repository<>))
+                  .As(typeof(IRepository<>)).InstancePerRequest();
 
+            
+            builder.RegisterType<FakeBus>().As<IEventPublisher>().InstancePerRequest();
+            builder.RegisterType<FakeBus>().As<ICommandSender>().InstancePerRequest();
           
             var containerBuilder = builder.Build();
 

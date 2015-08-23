@@ -2,11 +2,11 @@
 
 namespace ManteqCodeTest.Core
 {
-    public class InventoryCommandHandlers
+    public class CommandHandlers
     {
         private readonly IRepository<MedicalApprovalProcedure> _repository;
 
-        public InventoryCommandHandlers(IRepository<MedicalApprovalProcedure> repository)
+        public CommandHandlers(IRepository<MedicalApprovalProcedure> repository)
         {
             _repository = repository;
         }
@@ -14,6 +14,7 @@ namespace ManteqCodeTest.Core
         public void Handle(CreateMedicalProcedureApprovalRequest message)
         {
             var item = new MedicalApprovalProcedure(message.Id, message.PatientId, message.PatientName, message.DateOfBirth);
+          
             _repository.Save(item, -1);
         }
 

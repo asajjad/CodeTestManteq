@@ -8,9 +8,10 @@ namespace ManteqCodeTest.Core
         public MedicalApprovalProcedure()
         {
         }
-         public MedicalApprovalProcedure(Guid id,string patientId, string patientName,DateTime? dateOfBirth)
+        public MedicalApprovalProcedure(Guid id, string patientId, string patientName, DateTime? dateOfBirth)
         {
-            ApplyChange(new ApprovalCreated(id, patientId,patientName,dateOfBirth));
+            _id = id;
+            ApplyChange(new ApprovalCreated(id, patientId, patientName, dateOfBirth));
         }
         private Guid _id;
 
@@ -18,7 +19,7 @@ namespace ManteqCodeTest.Core
         {
             get { return _id; }
         }
-       
+
     }
-  
+
 }
